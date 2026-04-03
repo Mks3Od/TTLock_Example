@@ -94,78 +94,11 @@ class _LockPageState extends State<LockPage> {
   List<Map<String, Command>> _commandList = [
     {"Reset Lock": Command.resetLock},
     {"Unlock": Command.unlock},
-    {"Get Power": Command.getLockPower},
-    {"Get Lock Time": Command.getLockTime},
-    {"Set Lock Time": Command.setLockTime},
-    {"Get Lock Operate Record": Command.getLockOperateRecord},
-    {"Reset EKey": Command.resetEkey},
-    {"Modify Admin Passcode To 1234": Command.modifyAdminPasscode},
-    {"Get Lock Switch State": Command.getLockSwitchState},
     {"Custom Passcode 6666": Command.customPasscode},
-    {"Modify Passcode 6666 -> 7777": Command.modifyPasscode},
-    {"Get All Passcode": Command.getAllValidPasscode},
-    {"Delete Passcode 7777": Command.deletePasscode},
-    {"Reset Passcode": Command.resetPasscode},
+    {"Delete Passcode 6666": Command.deletePasscode},
     {"Add Card": Command.addCard},
-    // {"Modify Card valid Date": Command.modifyCard},
-    // {"Get All Cards": Command.getAllValidCard},
     {"Delete Card": Command.deleteCard},
     {"Clear All Cards": Command.clearCard},
-    // {"Add Fingerprint": Command.addFingerprint},
-    // {"Modify Fingerprint": Command.modifyFingerprint},
-    // {"Get All Fingerprints": Command.getAllValidFingerprint},
-    // {"Delete Fingerprint": Command.deleteFingerprint},
-    // {"Cleaer All Fingerprints": Command.clearFingerprint},
-
-    // {
-    //   "Get Lock Automatic Locking Periodic Time":
-    //       Command.getLockAutomaticLockingPeriodicTime,
-    // },
-    // {
-    //   "Set Lock Automatic Locking Periodic Time":
-    //       Command.setLockAutomaticLockingPeriodicTime,
-    // },
-    // {
-    //   "Get Lock Remote Unlock Switch State":
-    //       Command.getLockRemoteUnlockSwitchState,
-    // },
-    // {
-    //   "Set Lock Remote Unlock Switch State":
-    //       Command.setLockRemoteUnlockSwitchState,
-    // },
-    // {"Get Lock Audio Switch State": Command.getLockAudioSwitchState},
-    // {"Set Lock Audio Switch State": Command.setLockAudioSwitchState},
-    // {"Get Lock Unlock Direction": Command.getLockDirection},
-    // {"Set Lock Unlock Direction Left": Command.setLockDirectionLeft},
-    // {"Get Lock Sound Volume Type": Command.getLockSoundVolumeType},
-    // {"Set Lock Sound Volume Type": Command.setLockSoundVolumeType},
-    // {"Add Passage Mode": Command.addPassageMode},
-    // {"Clear All Passage Mode": Command.clearAllPassageModes},
-    // {"Activate Lift Floors": Command.activateLiftFloors},
-    // {"Set Lift Control Able Floors": Command.setLiftControlAbleFloors},
-    // {"Set Lift Work Mode": Command.setLiftWorkMode},
-    // {"Set Power Saver Work Mode": Command.setPowerSaverWorkMode},
-    // {"Set Power Saver Control Able": Command.setPowerSaverControlAbleLock},
-    // {"Set Door Sensor Switch": Command.setDoorSensorSwitch},
-    // {"Get Door Sensor Switch": Command.getDoorSensorSwitch},
-    // {"Get Door Sensor State": Command.getDoorSensorState},
-    // {"Set Hotel Card Sector": Command.setHotelCardSector},
-    // {"Set Hotel Data": Command.setHotelData},
-    // {"Get Lock System Info": Command.getLockSystemInfo},
-    // {"Set Nb Server Info": Command.setNBServerInfo},
-    // {"Get Admin Passcode": Command.getAdminPasscode},
-    // {"Get Passcode Verification Param": Command.getPasscodeVerificationParams},
-    // {"Recovery Card Data": Command.recoveryCard},
-    // {"Get LockVersion": Command.getLockVersion},
-    // {"Wifi lock scan nearby wifi": Command.scanWifi},
-    // {"Wifi lock config wifi": Command.configWifi},
-    // {"Wifi lock config server": Command.configServer},
-    // {"Wifi lock get wifi info": Command.getWifiInfo},
-    // {"Wifi lock config ip": Command.configIp},
-    {"Add face": Command.addFace},
-    // {"Modify face": Command.modifyFace},
-    {"Delete Face": Command.deleteFace},
-    // {"Clear Face": Command.clearFace},
   ];
 
   String note =
@@ -198,7 +131,7 @@ class _LockPageState extends State<LockPage> {
     )!.showErrorAndDismiss(text: 'errorCode:$errorCode errorMessage:$errorMsg');
   }
 
-  void _dismiss(String text) {
+  void _dismiss() {
     ProgressHud.of(_context!)!.dismiss();
   }
 
@@ -391,7 +324,7 @@ class _LockPageState extends State<LockPage> {
         ) {
           if (isSupport) {
             TTLock.deletePasscode(
-              "7777",
+              "6666",
               lockData,
               () {
                 _showSuccessAndDismiss("Success");
@@ -1116,15 +1049,55 @@ class _LockPageState extends State<LockPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Lock')),
+      appBar: AppBar(
+        title: Text('Lock'),
+        automaticallyImplyLeading: false,
+        leading: IconButton(
+          onPressed: () {},
+          onLongPress: () {
+            debugPrint("back...");
+            Navigator.pop(context);
+          },
+          icon: Icon(Icons.arrow_back_rounded),
+        ),
+
+        actions: [
+          IconButton(
+            onPressed: () {
+              _dismiss();
+            },
+            icon: Icon(Icons.delete),
+          ),
+
+          IconButton(
+            onPressed: () {
+              TTLock.getLockFeatureValue(
+                lockData,
+                (lockData) {
+                  debugPrint("✅ getLockFeatureValue success");
+                },
+                (errorCode, errorMsg) {
+                  debugPrint(
+                    "❌ getLockFeatureValue failed: $errorCode, $errorMsg",
+                  );
+                },
+              );
+            },
+            icon: Icon(Icons.get_app),
+          ),
+        ],
+      ),
       body: Material(
-        child: ProgressHud(
-          child: Container(
-            child: Builder(
-              builder: (context) {
-                _context = context;
-                return getListView();
-              },
+        child: PopScope(
+          canPop: false,
+          child: ProgressHud(
+            child: Container(
+              child: Builder(
+                builder: (context) {
+                  _context = context;
+                  return getListView();
+                },
+              ),
             ),
           ),
         ),

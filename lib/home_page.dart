@@ -74,8 +74,7 @@ class _HomePageState extends State<HomePage> {
             style: TextStyle(fontWeight: FontWeight.w600),
           ),
           onPressed: () {
-            String lockData =
-                "3eQp7X0qKkWIbdGflk1+Dkh+zTpe4QvQtY0NS3m7Jprs1r8m8aOfM6XaCKygNQM/P+RugZ+TiCT3VqOZPMlqm2dBIVSVSfpMm0x1IQ5gR4smQeBX0vTNgBniCwLOHdh9o7Va5uvwjfZBC68hdRiW9PMYqtQwljliVoH1H4RQKcC+ecdz9aHzq13Ko2EcabJkaY5758QLFX0OmLKwjNLyNCRJ41EFe6gxOijSXgeDLk1an02KQ7RIyuIkFabTdYfaQjsBMEwu1AaKKIZZStOvAuMUX3MshaD+GK8LppoOfIgIJvrcp9WQT5iRfsdNevu5eKoe05AVSpZVhT++EfFlQZQrNURBmGX";
+            String lockData = "3eQp7X0qKkWIbdGfl";
             String lockMac = "19:78:E7:B1:14:62";
             Navigator.push(
               context,
